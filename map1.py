@@ -28,17 +28,22 @@ html = """<h4>Volcano information:</h4>
 
 map = folium.Map(location=[38.58, -99.09], zoom_start=6, tiles="Mapbox Bright")
 
-fg = folium.FeatureGroup(name="My Map")
+fg_volcanoes = folium.FeatureGroup(name="American volcanoes map")
+fg_population = folium.FeatureGroup(name="World population map")
+
 for lt, ln, nm, ev in zip (lat, lon, name, elev):
     iframe = folium.IFrame(html=html % (nm, ev), width=200, height=100)
 
-    fg.add_child(folium.CircleMarker(location=[lt, ln], radius=10, popup=folium.Popup(iframe),
+    fg_volcanoes.add_child(folium.CircleMarker(location=[lt, ln], radius=10, popup=folium.Popup(iframe),
     fill_color=marker_color(ev), color="black", fill_opacity=0.7))
 
-fg.add_child(folium.GeoJson(data=(open("world.json", "r", encoding="utf-8-sig").read()),
+fg_population.add_child(folium.GeoJson(data=(open("world.json", "r", encoding="utf-8-sig").read()),
 style_function=lambda x: {"fillColor":"green" if x["properties"]["POP2005"] < 10000000
 else "orange" if 10000000 <= x["properties"]["POP2005"] < 20000000 else "red"}))
 
-map.add_child(fg)
+map.add_child(fg_volcanoes)
+map.add_child(fg_population)
+
+map.add_child(folium.LayerControl())
 
 map.save("Map1.html")
