@@ -35,6 +35,7 @@ for lt, ln, nm, ev in zip (lat, lon, name, elev):
     fg.add_child(folium.CircleMarker(location=[lt, ln], radius=10, popup=folium.Popup(iframe),
     fill_color=marker_color(ev), color="black", fill_opacity=0.7))
 
+fg.add_child(folium.GeoJson(data=(open("world.json", "r", encoding="utf-8-sig").read())))
 
 map.add_child(fg)
 
